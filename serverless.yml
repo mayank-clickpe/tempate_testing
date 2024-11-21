@@ -54,6 +54,70 @@ functions:
       - arn:aws:lambda:ap-south-1:779752077158:layer:pytz-psycopg2:2
       - arn:aws:lambda:ap-south-1:779752077158:layer:requests_toolbelt:1
       - arn:aws:lambda:ap-south-1:779752077158:layer:PyCryptodome:3
+  testing_user_details_lambda:
+    handler: functions.testing_user_details_lambda.handler.testing_user_details_lambda
+    name: ${self:service}-${sls:stage}-testing_user_details_lambda
+    description: ${self:custom.gitDescription}
+    timeout: 200
+    events:
+      - http:
+          path: /testing_user_details_lambda
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.authorizerArn.${sls:stage}}
+    layers:
+      - arn:aws:lambda:ap-south-1:779752077158:layer:pytz-psycopg2:2
+      - arn:aws:lambda:ap-south-1:779752077158:layer:requests_toolbelt:1
+      - arn:aws:lambda:ap-south-1:779752077158:layer:PyCryptodome:3
+  testing_why_is__details_int_lambda:
+    handler: functions.testing_why_is__details_int_lambda.handler.testing_why_is__details_int_lambda
+    name: ${self:service}-${sls:stage}-testing_why_is__details_int_lambda
+    description: ${self:custom.gitDescription}
+    timeout: 200
+    events:
+      - http:
+          path: /testing_user_details_int_lambda
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.authorizerArn.${sls:stage}}
+    layers:
+      - arn:aws:lambda:ap-south-1:779752077158:layer:pytz-psycopg2:2
+      - arn:aws:lambda:ap-south-1:779752077158:layer:requests_toolbelt:1
+      - arn:aws:lambda:ap-south-1:779752077158:layer:PyCryptodome:3
+  execute_user_detail_ext:
+    handler: functions.execute_user_detail_ext.handler.execute_user_detail_ext
+    name: ${self:service}-${sls:stage}-execute_user_detail_ext
+    description: ${self:custom.gitDescription}
+    timeout: 200
+    events:
+      - http:
+          path: /execute_user_detail_ext
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.authorizerArn.${sls:stage}}
+    layers:
+      - arn:aws:lambda:ap-south-1:779752077158:layer:pytz-psycopg2:2
+      - arn:aws:lambda:ap-south-1:779752077158:layer:requests_toolbelt:1
+      - arn:aws:lambda:ap-south-1:779752077158:layer:PyCryptodome:3
+  execute_user_detail_ext_callback:
+    handler: functions.execute_user_detail_ext.callback.execute_user_detail_ext_callback
+    name: ${self:service}-${sls:stage}-execute_user_detail_ext_callback
+    description: Callback function for execute_user_detail_ext
+    timeout: 200
+    events:
+      - http:
+          path: /user_detials_ext_lmbda
+          method: post
+          cors: true
+          authorizer:
+            arn: ${self:custom.authorizerArn.${sls:stage}}
+    layers:
+      - arn:aws:lambda:ap-south-1:779752077158:layer:pytz-psycopg2:2
+      - arn:aws:lambda:ap-south-1:779752077158:layer:requests_toolbelt:1
+      - arn:aws:lambda:ap-south-1:779752077158:layer:PyCryptodome:3
 package:
   patterns:
     - '!venv/**'
