@@ -1,0 +1,6 @@
+{
+  "devDependencies": {
+    "serverless-plugin-git-variables": "^5.2.0",
+    "serverless-plugin-scripts": "^1.0.2"
+  }
+}

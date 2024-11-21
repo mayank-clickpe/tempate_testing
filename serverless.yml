@@ -1,0 +1,70 @@
+service: testing-template
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: python3.9
+  # overwrite your defaults here
+  stage: ${opt:stage}
+  region: ap-south-1
+  vpc:
+    securityGroupIds:
+      - sg-dc65ccbf
+    subnetIds:
+      - subnet-0984343d0de359928
+      - subnet-02516599457190624
+  environment:
+    CURRENT_STAGE: ${opt:stage}
+    LOG_LEVEL: ${self:custom.log_state.${sls:stage}}
+
+custom:
+  gitDescription: ${git:repository}-${git:branch}-${git:sha1}-${git:isDirty}
+  stage: ${opt:stage}
+  log_state:
+    dev: ${opt:log_state, 'INFO'}
+    prod: ${opt:log_state, 'WARNING'}
+  pythonRequirements:
+    zip: true
+  iam:
+    - los-${opt:stage}-ap-south-1-lambdaRole
+  authorizerArn:
+    dev: arn:aws:lambda:ap-south-1:779752077158:function:authorization-dev-authorizer
+    prod: arn:aws:lambda:ap-south-1:779752077158:function:authorization-prod-authorizer
+  scripts:
+    hooks:
+       # Comment out the following line to skip TODO checking
+      # before:deploy:deploy: python3 templating-poc/script/check_todos.py
+
+functions:
+  testing_user_detail_int_lambda:
+    handler: functions.testing_user_detail_int_lambda.handler.testing_user_detail_int_lambda
+    name: ${self:service}-${sls:stage}-testing_user_detail_int_lambda
+    description: ${self:custom.gitDescription}
+    timeout: 200
+    events:
+      - http:
+          path: /testing_user_details_int_lambda
+          method: post
+          cors: true
+          # authorizer:
+          #   arn: ${self:custom.authorizerArn.${sls:stage}}
+
+    layers:
+      - arn:aws:lambda:ap-south-1:779752077158:layer:pytz-psycopg2:2
+      - arn:aws:lambda:ap-south-1:779752077158:layer:requests_toolbelt:1
+      - arn:aws:lambda:ap-south-1:779752077158:layer:PyCryptodome:3
+package:
+  patterns:
+    - '!venv/**'
+    - '!.idea/**'
+    - '!integrations/whatsapp_selenium/**'
+    - '!whatsapp.py'
+    - '!.vscode'
+  include:
+    - utils/**
+
+
+plugins:
+  - serverless-plugin-git-variables
+  - serverless-plugin-scripts

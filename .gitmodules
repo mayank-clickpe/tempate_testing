@@ -1,0 +1,8 @@
+[submodule "utils"]
+	path = utils
+	url = git@github.com:DailyPe/utils.git
+	branch = TECH-774-DEV
+[submodule "templating-poc"]
+	path = templating-poc
+	url = git@github.com:DailyPe/templating-poc.git
+	branch = dev
